@@ -1,11 +1,6 @@
 # AI Guardian
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/shield-check.svg" width="80" alt="AI Guardian Logo" />
-  <h3>Enterprise decision-intelligence control plane for explaining, remembering, and governing AI outcomes.</h3>
-</div>
-
-<br/>
+**Enterprise decision-intelligence control plane for explaining, remembering, and governing AI outcomes.**
 
 Organizations increasingly use AI to make critical decisions in loan approvals, hiring, insurance claims, healthcare diagnosis, and university admissions. However, they struggle to answer crucial questions regarding transparency, bias, version drift, and historical precedent. 
 
