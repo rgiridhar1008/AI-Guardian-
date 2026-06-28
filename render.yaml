@@ -1,0 +1,17 @@
+﻿services:
+  - type: web
+    name: ai-guardian-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: {name: ai-guardian-db, property: connectionString}
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+databases:
+  - name: ai-guardian-db
+    plan: starter
