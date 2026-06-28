@@ -1,10 +1,84 @@
-﻿# AI Guardian
+# AI Guardian
 
-Enterprise decision-intelligence control plane for explaining, remembering, and governing AI outcomes.
+<div align="center">
+  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/shield-check.svg" width="80" alt="AI Guardian Logo" />
+  <h3>Enterprise decision-intelligence control plane for explaining, remembering, and governing AI outcomes.</h3>
+</div>
 
-AI Guardian is not a chatbot. It is an auditable workflow for high-stakes decisions: upload a source decision, route the explanation under cost and compliance constraints, retrieve relevant institutional history, inspect protected-cohort risk, compare model drift, and issue a verifiable PDF report.
+<br/>
 
-## Architecture
+Organizations increasingly use AI to make critical decisions in loan approvals, hiring, insurance claims, healthcare diagnosis, and university admissions. However, they struggle to answer crucial questions regarding transparency, bias, version drift, and historical precedent. 
+
+**AI Guardian** solves these problems by providing explainability, auditability, long-term memory, and intelligent runtime routing. It is built as a modern enterprise SaaS platform designed for high-stakes, regulated environments.
+
+---
+
+## Core Technologies
+
+AI Guardian is built around two central technologies:
+
+1. **cascadeflow (Runtime Intelligence)**
+   - Automatic model routing based on decision complexity.
+   - Strict budget and latency enforcement.
+   - Immutable audit trail of every routing decision.
+2. **Hindsight (Persistent Memory)**
+   - Long-term audit memory retention.
+   - Similar case retrieval via multi-strategy search.
+   - Continuous learning from auditor feedback.
+
+---
+
+## Application Modules
+
+AI Guardian is composed of ten comprehensive modules designed for end-to-end AI governance:
+
+1. **Authentication & Security**: Secure JWT login, signup, role-based access control (RBAC), password reset, and rigorous rate-limiting.
+2. **Enterprise Dashboard**: Analytical cards, charts, statistics, recent activity feeds, cost analytics, and memory growth tracking.
+3. **Decision Ingestion**: Upload engine supporting CSV, Excel (XLSX), and JSON formats with automatic data parsing.
+4. **AI Explanation**: Dual-layered explainability. Generates both a plain-language summary and a technical risk/feature contribution analysis.
+5. **Similar Case Search (Hindsight)**: Semantically searches historical decisions, returning similarity scores, previous outcomes, and past recommendations.
+6. **Bias Detection**: Scans decisions against protected cohorts (Gender, Age, Region, Income) and generates severity-based fairness reports.
+7. **Model Drift Detection**: Compares multiple model versions to track approval rate shifts and alert on outcome drift.
+8. **Runtime Intelligence (cascadeflow)**: Routes simple queries to small models, medium queries to versatile models, and complex compliance queries to large models.
+9. **Verifiable Audit Reports**: Generates downloadable PDF reports complete with applicant details, explanations, bias findings, routing costs, and SHA-256 cryptographic checksums.
+10. **Analytics**: Deep portfolio intelligence including approval/rejection rates, model comparisons, bias trends, and audit timelines.
+
+---
+
+## Technology Stack
+
+**Frontend**
+- **Framework**: React 19, Vite, TypeScript
+- **Styling**: Tailwind CSS 4 (Glassmorphism, Dark Mode, Modern Typography)
+- **Animations**: Framer Motion
+- **Data Visualization**: Chart.js, react-chartjs-2
+- **Icons**: Lucide React
+- **Routing & Forms**: React Router DOM, React Hook Form
+
+**Backend**
+- **Framework**: FastAPI (Python 3.11+), Uvicorn
+- **Database**: PostgreSQL (Production), SQLite (Local Development)
+- **ORM**: SQLAlchemy 2.0
+- **Validation**: Pydantic, pydantic-settings
+- **Auth & Security**: python-jose (JWT), passlib (bcrypt), CORS middleware
+- **File Parsing**: openpyxl, built-in csv/json handlers
+- **PDF Generation**: ReportLab
+- **AI Integrations**: Groq API, Hindsight Client, cascadeflow
+
+---
+
+## Architecture & Workflow
+
+1. User uploads a decision file.
+2. Decision parser structures the data.
+3. **cascadeflow** evaluates the complexity and budget.
+4. **cascadeflow** routes the request to the optimal LLM (Small/Medium/Large).
+5. The LLM generates the technical and plain-language explanation.
+6. **Hindsight** searches institutional memory for similar past cases.
+7. Bias and model drift analyses are performed.
+8. The full audit report is generated as a secure PDF.
+9. Everything is stored persistently in the database and Hindsight memory bank.
+10. Dashboard analytics are updated in real-time.
 
 ```mermaid
 flowchart LR
@@ -18,79 +92,78 @@ flowchart LR
   LLM --> API
 ```
 
-The app runs in **demo-safe mode** without AI credentials. Explanations use a deterministic policy adapter, memory falls back to indexed audit records, and all telemetry is still written. Add Hindsight and Groq keys to enable the cloud paths.
+---
 
-## Features
+## Database Design
 
-- JWT authentication, role field, secure headers, rate limiting, validation, and bounded uploads
-- CSV, JSON, and XLSX ingestion
-- Plain-language and technical decision explanations
-- Hindsight Cloud `retain` / `recall`, plus feedback retention
-- cascadeflow budget-aware small / medium / large model selection and immutable routing ledger
-- Protected-attribute fairness scans and model-version drift comparison
-- Portfolio analytics for outcomes, cost, latency, model use, and memory growth
-- Downloadable audit PDFs with provenance and SHA-256 checksums
-- Responsive light/dark enterprise interface
+The application uses a highly normalized relational database schema:
+- `users`: Authentication and roles
+- `audits`: Core decision records, scores, and recommendations
+- `models` / `model_versions`: Track AI models and drift metrics
+- `audit_reports`: PDF checksums and provenance
+- `feedback`: Auditor corrections and ratings
+- `memory_logs`: Telemetry for Hindsight retention and recall
+- `bias_logs`: Tracked disparate impact findings
+- `routing_logs`: Immutable ledger of every cascadeflow routing decision
+- `cost_logs`: Token and USD cost tracking
+- `settings` / `notifications`: User preferences and alerts
 
-## Local setup
+---
 
-### API
+## Security Posture
 
-```powershell
+- **Authentication**: JWT-based with secure headers.
+- **Transport**: HTTPS-ready.
+- **Protection**: SQL Injection protection (via SQLAlchemy ORM), XSS/CSRF mitigation.
+- **Validation**: Strict Pydantic input validation on all endpoints.
+- **Rate Limiting**: Custom deque-based sliding window rate limiting (120 req/min).
+- **File Security**: Bounded uploads (max 10MB) with strict MIME type checking.
+
+---
+
+## Local Setup & Deployment
+
+### 1. Backend API
+
+```bash
 cd backend
 python -m venv .venv
-.venv\Scripts\Activate.ps1
+
+# Activate virtual environment
+# Windows: .venv\Scripts\Activate.ps1
+# macOS/Linux: source .venv/bin/activate
+
 pip install -r requirements.txt
-Copy-Item .env.example .env
+cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
-API docs: `http://localhost:8000/docs`. Demo login: `auditor@aiguardian.dev` / `Guardian123!`.
+*API Documentation available at `http://localhost:8000/docs`.*  
+*Demo credentials: `auditor@aiguardian.dev` / `Guardian123!`*
 
-### Web app
+### 2. Frontend Web App
 
-```powershell
+```bash
 cd frontend
 npm install
-Copy-Item .env.example .env
 npm run dev
 ```
 
-Open `http://localhost:5173`.
+*Open `http://localhost:5173` in your browser.*
 
-## Environment
+### Deployment
+- **Frontend**: Deploy to Vercel (set `VITE_API_URL`).
+- **Backend**: Deploy to Render or Railway using the included `Dockerfile` and `render.yaml`. Attach a PostgreSQL instance and set environment variables.
 
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | PostgreSQL URL in production; SQLite works locally |
-| `SECRET_KEY` | JWT signing secret; generate a long random production value |
-| `GROQ_API_KEY` | Enables live OpenAI-compatible inference |
-| `GROQ_BASE_URL` | Provider base URL |
-| `HINDSIGHT_API_KEY` | Enables Hindsight Cloud memory |
-| `HINDSIGHT_BANK_ID` | Dedicated enterprise memory bank |
-| `CORS_ORIGINS` | Comma-separated trusted web origins |
+---
 
-## Tests
+## Additional Documentation
 
-```powershell
-cd backend; pytest
-cd ../frontend; npm run build
-```
-
-## Deployment
-
-- Frontend: import `frontend` into Vercel and set `VITE_API_URL`.
-- Backend: deploy `backend/Dockerfile` to Render or Railway, attach PostgreSQL, then set the variables above.
-- Production: terminate TLS at the platform edge, rotate secrets, restrict CORS, use managed PostgreSQL backups, and place organization SSO in front of JWT issuance.
-
-## API surface
-
-Authentication: `POST /login`, `/register`, `/forgot-password`. Workflow: `POST /upload`, `/analyze`, `/explain`, `/similar`, `/bias`, `/drift`, `/feedback`, `/report`. Read models: `GET /dashboard`, `/analytics`, `/history`, `/reports`, `/routing`. Lifecycle: `DELETE /audit/{id}`.
-
-## Hindsight and cascadeflow
-
-Hindsight stores durable audit facts and auditor corrections in a dedicated bank and recalls prior cases through multi-strategy retrieval. cascadeflow initializes in enforce mode when installed and the application policy adapter performs transparent complexity, latency, compliance, and budget selection. Both integrations fail safely to local behavior, never discarding an audit because an external service is unavailable.
+- [Architecture Guide](docs/ARCHITECTURE.md)
+- [API Reference](docs/API.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)
+- [Contributing Guide](CONTRIBUTING.md)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
