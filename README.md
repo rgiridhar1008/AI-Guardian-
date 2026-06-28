@@ -6,6 +6,10 @@ Organizations increasingly use AI to make critical decisions in loan approvals, 
 
 **AI Guardian** solves these problems by providing explainability, auditability, long-term memory, and intelligent runtime routing. It is built as a modern enterprise SaaS platform designed for high-stakes, regulated environments.
 
+Watch the complete demo of **AI Guardian – Intelligent AI Decision Audit Agent** here:
+
+[![Watch Demo](https://img.shields.io/badge/▶️-Watch%20Demo-red?style=for-the-badge)](https://drive.google.com/file/d/1PkUugKewtlePpL2yZTslEeO08uT0Rvxc/view?usp=sharing)
+
 ---
 
 ## Core Technologies
