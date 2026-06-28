@@ -1,0 +1,32 @@
+# ── Core framework ──────────────────────────────────────
+fastapi==0.115.14
+uvicorn[standard]==0.34.3
+sqlalchemy==2.0.41
+pydantic-settings==2.9.1
+
+# ── Security & auth ─────────────────────────────────────
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.20
+email-validator==2.2.0
+
+# ── HTTP client ─────────────────────────────────────────
+httpx==0.28.1
+
+# ── Database drivers ────────────────────────────────────
+psycopg[binary]==3.2.9
+
+# ── File parsing ────────────────────────────────────────
+openpyxl==3.1.5
+
+# ── PDF report generation ──────────────────────────────
+reportlab==4.4.2
+
+# ── Testing ─────────────────────────────────────────────
+pytest==8.4.1
+pytest-asyncio==1.0.0
+
+# ── AI integrations (optional – install separately) ────
+# These packages provide enhanced AI capabilities but the
+# application runs in demo-safe mode without them.
+# pip install cascadeflow hindsight-client
